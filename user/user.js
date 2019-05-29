@@ -22,7 +22,7 @@ module.exports.buildMakeUser = function buildMakeUser({ hash }) {
 
       get password() {
         return hashedPassword;
-      }
+      },
     };
   };
 };
