@@ -1,7 +1,7 @@
-const mockUserDataStore = require('../data/user-data.mock');
+const mockUserDb = require('../data/user-db.mock');
 const { buildSignUpUser } = require('./sign-up-user');
 
-const signUpUser = buildSignUpUser({ userDataStore: mockUserDataStore });
+const signUpUser = buildSignUpUser({ userDataStore: mockUserDb });
 
 const user = {
   username: 'dummy',
@@ -9,14 +9,14 @@ const user = {
 };
 
 describe('Sign up user', () => {
-  beforeEach(() => {
-    mockUserDataStore.clear();
+  beforeEach(async () => {
+    await mockUserDb.clear();
   });
 
   it('should add user to user data store', async () => {
     await signUpUser(user);
 
-    const savedUser = await mockUserDataStore.findByUsername(user.username);
+    const savedUser = await mockUserDb.findByUsername(user.username);
 
     expect(savedUser).toBeTruthy();
   });

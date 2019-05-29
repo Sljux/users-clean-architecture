@@ -8,7 +8,7 @@ async function insert(user) {
   userMap.set(user.username, user);
 }
 
-function clear() {
+async function clear() {
   userMap.clear();
 }
 
