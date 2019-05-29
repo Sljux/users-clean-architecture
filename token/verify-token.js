@@ -8,10 +8,6 @@ module.exports.buildVerifyToken = function buildVerifyToken({ verify }) {
     const { iat, exp, ...data } = verified.payload;
 
     return {
-      get algorithm() {
-        return verified.header.alg;
-      },
-
       get data() {
         return data;
       },

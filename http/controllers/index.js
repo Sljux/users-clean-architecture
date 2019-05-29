@@ -1,7 +1,7 @@
-const { signUpUser } = require('../../use-cases');
+const { signUpUser, encodeUserToToken } = require('../../use-cases');
 const { buildSignUpController } = require('./sign-up');
 
-const signUpController = buildSignUpController({ signUpUser });
+const signUpController = buildSignUpController({ signUpUser, encodeUserToToken });
 
 module.exports = {
   signUpController,

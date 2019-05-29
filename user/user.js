@@ -1,7 +1,7 @@
 module.exports.buildMakeUser = function buildMakeUser({ hash }) {
   return async function makeUser({
     username,
-    password
+    password,
   }) {
     checkForUsername(username);
 
