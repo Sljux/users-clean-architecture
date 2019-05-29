@@ -1,28 +1,44 @@
 const { makeUser } = require('./index');
 
 describe('user', () => {
-  it('must have a username', () => {
-    const userData = { username: null };
+  it('must have a username', async () => {
+    const userData = { username: null, password: 'dummy' };
 
-    expect(makeUser(userData)).rejects;
+    try {
+      await makeUser(userData);
+    } catch (e) {
+      expect(e).toBeInstanceOf(Error);
+    }
   });
 
-  it('must have a non-empty username', () => {
-    const userData = { username: '' };
+  it('must have a non-empty username', async () => {
+    const userData = { username: '', password: 'dummy' };
 
-    expect(makeUser(userData)).rejects;
+    try {
+      await makeUser(userData);
+    } catch (e) {
+      expect(e).toBeInstanceOf(Error);
+    }
   });
 
-  it('must have a non-white-space username', () => {
-    const userData = { username: '\n    \t' };
+  it('must have a non-white-space username', async () => {
+    const userData = { username: '\n    \t', password: 'dummy' };
 
-    expect(makeUser(userData)).rejects;
+    try {
+      await makeUser(userData);
+    } catch (e) {
+      expect(e).toBeInstanceOf(Error);
+    }
   });
 
-  it('must have a password', () => {
+  it('must have a password', async () => {
     const userData = { username: 'dummy', password: null };
 
-    expect(makeUser(userData)).rejects;
+    try {
+      await makeUser(userData);
+    } catch (e) {
+      expect(e).toBeInstanceOf(Error);
+    }
   });
 
   it('should have trimmed username', async () => {
@@ -31,7 +47,10 @@ describe('user', () => {
 
     const userData = { username, password: 'dummyPassword' };
 
-    expect(makeUser(userData)).resolves.toMatchObject({ username: trimmedUsername });
+    const user = await makeUser(userData);
+
+    expect(user.username).toEqual(trimmedUsername);
+    expect(user.username).not.toEqual(username);
   });
 
   it('should have hashed password', async () => {
@@ -39,6 +58,8 @@ describe('user', () => {
 
     const userData = { username: 'dummy', password };
 
-    expect(makeUser(userData)).resolves.not.toMatchObject({ password });
+    const user = await makeUser(userData);
+
+    expect(user.password).not.toEqual(password);
   });
 });
