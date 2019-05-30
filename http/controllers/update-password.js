@@ -9,8 +9,6 @@ module.exports.buildUpdatePasswordController = function buildUpdatePasswordContr
 
       username = decoded.data.username;
     } catch (e) {
-      console.log(e);
-
       res.status(401).json({ error: 'Not authorized' });
       return;
     }

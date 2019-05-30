@@ -52,6 +52,7 @@ module.exports.buildUserDb = function buildUserDb({ getDbConnection }) {
 
 function extractData(result) {
   const { _id, likedBy, ...data } = result;
+  const likes = likedBy ? likedBy.length : 0;
 
-  return { id: _id, likes: likedBy.length, ...data };
+  return { id: _id, likes, ...data };
 }
