@@ -1,7 +1,9 @@
 const mockUserDb = require('../data/user-db.mock');
 const { buildSignUpUser } = require('./sign-up-user');
+const { buildEncodeUserToToken } = require('./encode-user-to-token');
 
-const signUpUser = buildSignUpUser({ userDataStore: mockUserDb });
+const encodeUserToToken = buildEncodeUserToToken();
+const signUpUser = buildSignUpUser({ userDataStore: mockUserDb, encodeUserToToken });
 
 const user = {
   username: 'dummy',
@@ -28,5 +30,11 @@ describe('Sign up user', () => {
     } catch (e) {
       expect(e).toBeInstanceOf(Error);
     }
+  });
+
+  it('should return token on valid sign up', async () => {
+    const token = await signUpUser(user);
+
+    expect(token).toBeTruthy();
   });
 });

@@ -1,4 +1,4 @@
-module.exports.buildMakeUser = function buildMakeUser({ hash }) {
+module.exports.buildMakeUser = function buildMakeUser({ hash, compare }) {
   return async function makeUser({
     username,
     password,
@@ -13,7 +13,7 @@ module.exports.buildMakeUser = function buildMakeUser({ hash }) {
       throw new Error('User must have a password');
     }
 
-    const hashedPassword = await hash(password);
+    let hashedPassword;
 
     return {
       get username() {
@@ -21,7 +21,19 @@ module.exports.buildMakeUser = function buildMakeUser({ hash }) {
       },
 
       get password() {
-        return hashedPassword;
+        return password;
+      },
+
+      async hashedPassword() {
+        if (hashedPassword) {
+          return hashedPassword;
+        }
+
+        return hash(password);
+      },
+
+      async comparePassword(otherPassword) {
+        return compare(password, otherPassword);
       },
     };
   };

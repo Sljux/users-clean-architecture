@@ -60,6 +60,6 @@ describe('user', () => {
 
     const user = await makeUser(userData);
 
-    expect(user.password).not.toEqual(password);
+    expect(user.hashedPassword()).resolves.not.toEqual(password);
   });
 });

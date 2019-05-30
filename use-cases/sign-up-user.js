@@ -1,6 +1,6 @@
 const { makeUser } = require('../user');
 
-module.exports.buildSignUpUser = function ({ userDataStore }) {
+module.exports.buildSignUpUser = function buildSignUpUser({ userDataStore, encodeUserToToken }) {
   return async function signUpUser(userData) {
     const user = await makeUser(userData);
 
@@ -10,9 +10,15 @@ module.exports.buildSignUpUser = function ({ userDataStore }) {
       throw new Error('User with that username already exists');
     }
 
-    return userDataStore.insert({
+    const insertPromise = userDataStore.insert({
       username: user.username,
-      password: user.password,
+      password: await user.hashedPassword(),
     });
+
+    const tokenPromise = encodeUserToToken(user);
+
+    const [_, token] = await Promise.all([insertPromise, tokenPromise]);
+
+    return token;
   }
 };

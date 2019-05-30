@@ -1,10 +1,9 @@
-module.exports.buildSignUpController = function buildSignUpController({ signUpUser, encodeUserToToken }) {
+module.exports.buildSignUpController = function buildSignUpController({ signUpUser }) {
   return async function signUpController(req, res) {
     const userData = req.body;
 
     try {
-      const savedUser = await signUpUser(userData);
-      const token = await encodeUserToToken(savedUser);
+      const token = await signUpUser(userData);
 
       res.status(201).json({ token });
     } catch (e) {
