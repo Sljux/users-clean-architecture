@@ -32,8 +32,8 @@ module.exports.buildMakeUser = function buildMakeUser({ hash, compare }) {
         return hash(password);
       },
 
-      async comparePassword(otherPassword) {
-        return compare(password, otherPassword);
+      async comparePassword(otherHashedPassword) {
+        return compare(password, otherHashedPassword);
       },
     };
   };

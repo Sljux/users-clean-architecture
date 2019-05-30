@@ -20,7 +20,7 @@ module.exports.buildUserDb = function buildUserDb({ getDbConnection }) {
   async function insert(userData) {
     const users = await getUserCollection();
 
-    const inserted = await users.insertOne(userData);
+    const inserted = await users.insertOne({ likedBy: [], ...userData });
 
     return extractData(inserted.ops[0]);
   }
@@ -35,16 +35,23 @@ module.exports.buildUserDb = function buildUserDb({ getDbConnection }) {
     return users.updateOne({ username: userData.username }, { $set: { password: userData.password } });
   }
 
+  async function likeUser(userToLike, currentUsername) {
+    const users = await getUserCollection();
+
+    return users.updateOne({ username: userToLike.username }, { $addToSet: { likedBy: currentUsername } });
+  }
+
   return {
     findByUsername,
     insert,
     clear,
     updatePassword,
+    likeUser,
   };
 };
 
 function extractData(result) {
-  const { _id, ...data } = result;
+  const { _id, likedBy, ...data } = result;
 
-  return { id: _id, ...data };
+  return { id: _id, likes: likedBy.length, ...data };
 }

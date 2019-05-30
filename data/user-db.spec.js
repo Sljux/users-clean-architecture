@@ -19,6 +19,16 @@ const user = {
   password: 'dummyPassword',
 };
 
+const anotherUser = {
+  username: 'dummy1',
+  password: 'dummyPassword1',
+};
+
+const yetAnotherUser = {
+  username: 'dummy2',
+  password: 'dummyPassword2',
+};
+
 describe('Users Db', () => {
   beforeAll(async () => {
     if (!client.isConnected()) {
@@ -38,5 +48,52 @@ describe('Users Db', () => {
 
     expect(inserted.username).toEqual(saved.username);
     expect(inserted.password).toEqual(saved.password);
+  });
+
+  it('should change password', async () => {
+    const inserted = await userDb.insert(user);
+
+    const updatedUser = { username: inserted.username, password: inserted.password + 'SomethingMore' };
+    await userDb.updatePassword(updatedUser);
+
+    const saved = await userDb.findByUsername(user.username);
+
+    expect(saved.password).not.toEqual(inserted.password);
+  });
+
+  it('should add a like', async () => {
+    const likingUser = await userDb.insert(user);
+    const likedUser = await userDb.insert(anotherUser);
+
+    await userDb.likeUser(likedUser, likingUser.username);
+
+    const fromDb = await userDb.findByUsername(likedUser.username);
+
+    expect(fromDb.likes).toEqual(1);
+  });
+
+  it(`shouldn't add a like twice from same user`, async () => {
+    const likingUser = await userDb.insert(user);
+    const likedUser = await userDb.insert(anotherUser);
+
+    await userDb.likeUser(likedUser, likingUser.username);
+    await userDb.likeUser(likedUser, likingUser.username);
+
+    const fromDb = await userDb.findByUsername(likedUser.username);
+
+    expect(fromDb.likes).toEqual(1);
+  });
+
+  it('should add two likes from two different users', async () => {
+    const likingUser1 = await userDb.insert(user);
+    const likingUser2 = await userDb.insert(yetAnotherUser);
+    const likedUser = await userDb.insert(anotherUser);
+
+    await userDb.likeUser(likedUser, likingUser1.username);
+    await userDb.likeUser(likedUser, likingUser2.username);
+
+    const fromDb = await userDb.findByUsername(likedUser.username);
+
+    expect(fromDb.likes).toEqual(2);
   });
 });

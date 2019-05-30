@@ -36,6 +36,6 @@ describe('Change user password', () => {
     const userFromDb = await mockUserDb.findByUsername(userWithNewPassword.username);
 
     expect(userFromDb.username).toEqual(userWithNewPassword.username);
-    expect(user.comparePassword(userFromDb.password)).resolves.toEqual(false);
+    expect(await user.comparePassword(userFromDb.password)).toEqual(false);
   });
 });
