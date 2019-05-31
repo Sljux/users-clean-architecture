@@ -1,7 +1,9 @@
 const mockUserDb = require('../data/user-db.mock');
 const { makeUser } = require('../user');
+const { buildUnlikeUser } = require('./unlike-user');
 const { buildLikeUser } = require('./like-user');
 
+const unlikeUser = buildUnlikeUser({ userDataStore: mockUserDb });
 const likeUser = buildLikeUser({ userDataStore: mockUserDb });
 
 const likingUser = {
@@ -14,6 +16,11 @@ const likedUser = {
   password: 'user2password',
 };
 
+const notLikedUser = {
+  username: 'user3',
+  password: 'user3password',
+};
+
 async function insertUser(userData) {
   const user = await makeUser(userData);
   await mockUserDb.insert({ username: user.username, password: await user.hashedPassword() });
@@ -21,7 +28,7 @@ async function insertUser(userData) {
   return user;
 }
 
-describe('Like user', () => {
+describe('Unlike user', () => {
   afterEach(async () => {
     await mockUserDb.clear();
   });
@@ -32,7 +39,7 @@ describe('Like user', () => {
     let error;
 
     try {
-      await likeUser(user.username, likedUser.username);
+      await unlikeUser(user.username, likedUser.username);
     } catch (e) {
       error = e;
     }
@@ -40,14 +47,31 @@ describe('Like user', () => {
     expect(error).toBeInstanceOf(Error);
   });
 
-  it('should add like on valid username', async () => {
+  it('should not decrease likes when un-liking user that you never liked', async () => {
     const user = await insertUser(likingUser);
     const userToLike = await insertUser(likedUser);
+    const userNotToLike = await insertUser(notLikedUser);
 
-    await likeUser(user.username, likedUser.username);
+    await likeUser(user.username, userToLike.username);
+
+    await unlikeUser(user.username, userNotToLike.username);
 
     const fromDB = await mockUserDb.findByUsername(userToLike.username);
 
     expect(fromDB.likes).toEqual(1);
+  });
+
+
+  it('should decrease likes when un-liking user that you liked', async () => {
+    const user = await insertUser(likingUser);
+    const userToLike = await insertUser(likedUser);
+
+    await likeUser(user.username, userToLike.username);
+
+    await unlikeUser(user.username, userToLike.username);
+
+    const fromDB = await mockUserDb.findByUsername(userToLike.username);
+
+    expect(fromDB.likes).toEqual(0);
   });
 });

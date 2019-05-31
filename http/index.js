@@ -7,6 +7,7 @@ const {
   meController,
   updatePasswordController,
   likeUserController,
+  unlikeUserController,
 } = require('./controllers');
 
 const app = express();
@@ -19,5 +20,6 @@ app.post('/login', loginController);
 app.get('/me', meController);
 app.put('/me/update-password', updatePasswordController);
 app.post('/user/:id/like', likeUserController);
+app.delete('/user/:id/unlike', unlikeUserController);
 
 module.exports = app;

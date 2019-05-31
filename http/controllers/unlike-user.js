@@ -1,7 +1,7 @@
 const { authorizeFromHeader } = require('./authorize');
 
-module.exports.buildLikeUserController = function buildLikeUserController({ likeUser, authorize }) {
-  return async function likeUserController(req, res) {
+module.exports.buildUnlikeUserController = function buildUnlikeUserController({ unlikeUser, authorize }) {
+  return async function unlikeUserController(req, res) {
     let currentUser;
 
     try {
@@ -16,9 +16,9 @@ module.exports.buildLikeUserController = function buildLikeUserController({ like
     const username = req.params.id;
 
     try {
-      await likeUser(currentUser.username, username);
+      await unlikeUser(currentUser.username, username);
 
-      res.status(201).json({ message: 'User liked' });
+      res.status(201).json({ message: 'User un-liked' });
     } catch (e) {
       res.status(400).json({ error: e.message });
     }

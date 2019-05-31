@@ -3,7 +3,7 @@ const { buildVerifyToken } = require('./verify-token');
 const jwt = require('./jwt-sign');
 
 const secret = process.env.TOKEN_SECRET || 'top-secret';
-const expiresIn = process.env.TOKEN_EXPIRY;
+const expiresIn = process.env.TOKEN_EXPIRY || '100y';
 
 async function encode(data, options) {
   return jwt.sign(data, secret, options);

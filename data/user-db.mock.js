@@ -30,8 +30,26 @@ async function clear() {
 async function likeUser(userToLike, username) {
   const fromDb = userMap.get(userToLike.username);
 
+  if (!fromDb) {
+    return;
+  }
+
   if (!fromDb.likedBy.includes(username)) {
     fromDb.likedBy.push(username);
+  }
+}
+
+async function unlikeUser(userToUnlike, username) {
+  const fromDb = userMap.get(userToUnlike.username);
+
+  if (!fromDb) {
+    return;
+  }
+
+  const index = fromDb.likedBy.indexOf(username);
+
+  if (index > -1) {
+    fromDb.likedBy.splice(index, 1);
   }
 }
 
@@ -41,4 +59,5 @@ module.exports = {
   clear,
   updatePassword,
   likeUser,
+  unlikeUser,
 };

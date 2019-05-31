@@ -41,12 +41,19 @@ module.exports.buildUserDb = function buildUserDb({ getDbConnection }) {
     return users.updateOne({ username: userToLike.username }, { $addToSet: { likedBy: currentUsername } });
   }
 
+  async function unlikeUser(userToUnlike, currentUsername) {
+    const users = await getUserCollection();
+
+    return users.updateOne({ username: userToUnlike.username }, { $pull: { likedBy: currentUsername } });
+  }
+
   return {
     findByUsername,
     insert,
     clear,
     updatePassword,
     likeUser,
+    unlikeUser,
   };
 };
 

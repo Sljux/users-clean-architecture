@@ -96,4 +96,45 @@ describe('Users Db', () => {
 
     expect(fromDb.likes).toEqual(2);
   });
+
+  it('should remove like', async () => {
+    const likingUser = await userDb.insert(user);
+    const likedUser = await userDb.insert(anotherUser);
+
+    await userDb.likeUser(likedUser, likingUser.username);
+    await userDb.unlikeUser(likedUser, likingUser.username);
+
+    const fromDb = await userDb.findByUsername(likedUser.username);
+
+    expect(fromDb.likes).toEqual(0);
+  });
+
+  it(`shouldn't remove like twice from same user`, async () => {
+    const likingUser = await userDb.insert(user);
+    const likedUser = await userDb.insert(anotherUser);
+
+    await userDb.likeUser(likedUser, likingUser.username);
+    await userDb.unlikeUser(likedUser, likingUser.username);
+    await userDb.unlikeUser(likedUser, likingUser.username);
+
+    const fromDb = await userDb.findByUsername(likedUser.username);
+
+    expect(fromDb.likes).toEqual(0);
+  });
+
+  it('should add two likes from two different users', async () => {
+    const likingUser1 = await userDb.insert(user);
+    const likingUser2 = await userDb.insert(yetAnotherUser);
+    const likedUser = await userDb.insert(anotherUser);
+
+    await userDb.likeUser(likedUser, likingUser1.username);
+    await userDb.likeUser(likedUser, likingUser2.username);
+
+    await userDb.unlikeUser(likedUser, likingUser1.username);
+    await userDb.unlikeUser(likedUser, likingUser2.username);
+
+    const fromDb = await userDb.findByUsername(likedUser.username);
+
+    expect(fromDb.likes).toEqual(0);
+  });
 });
