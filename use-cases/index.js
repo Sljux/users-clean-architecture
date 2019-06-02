@@ -6,6 +6,7 @@ const { buildChangeUserPassword } = require('./change-user-password');
 const { buildLikeUser } = require('./like-user');
 const { buildUnlikeUser } = require('./unlike-user');
 const { buildFetchUser } = require('./fetch-user');
+const { buildListUsers } = require('./list-users');
 
 const { userDb } = require('../data');
 
@@ -17,6 +18,7 @@ const changeUserPassword = buildChangeUserPassword({ userDataStore: userDb });
 const likeUser = buildLikeUser({ userDataStore: userDb });
 const unlikeUser = buildUnlikeUser({ userDataStore: userDb });
 const fetchUser = buildFetchUser({ userDataStore: userDb });
+const listUsers = buildListUsers({ userDataStore: userDb });
 
 module.exports = {
   signUpUser,
@@ -27,4 +29,5 @@ module.exports = {
   likeUser,
   unlikeUser,
   fetchUser,
+  listUsers,
 };

@@ -106,7 +106,7 @@ function extractData(result) {
   let { _id, likedBy, likes, ...data } = result;
 
   if (!likes) {
-    likes = likedBy.length;
+    likes = likedBy ? likedBy.length : 0;
   }
 
   return { id: _id, likes, ...data };
