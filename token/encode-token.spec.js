@@ -10,7 +10,7 @@ describe('Token', () => {
   });
 
   it('should produce encoded token', async () => {
-    const encodedToken = await encodeToken({ data: { some: 'data' } });
+    const encodedToken = await encodeToken({ data: { username: 'dummy' } });
 
     expect(typeof encodedToken).toBe('string');
     expect(encodedToken.length).toBeGreaterThan(0);

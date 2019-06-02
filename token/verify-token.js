@@ -16,7 +16,7 @@ module.exports.buildVerifyToken = function buildVerifyToken({ verify }) {
         return new Date(iat * 1000);
       },
 
-      get expires() {
+      get expiresAt() {
         return new Date(exp * 1000);
       },
     }

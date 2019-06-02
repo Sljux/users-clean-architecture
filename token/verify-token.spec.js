@@ -10,7 +10,7 @@ describe('Verify token', () => {
   });
 
   it('should decode a valid token', async () => {
-    const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzb21lIjoiZGF0YSIsImlhdCI6MTU1OTMxMTg5MCwiZXhwIjoxNTU5Mzk4MjkwfQ.PaCcf_hQMoLcQgGA0vjJPyIHbD3UFS1ylF8y5YGWeGw';
+    const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzb21lIjoiZGF0YSIsImlhdCI6MTU1OTQ4OTkwMCwiZXhwIjozMTM3MzY5OTAwfQ.kS6BiRick3pr3pVwQXFGE5T3QgBehw1SoFiemvvxouk';
 
     const verified = await verifyToken({ token });
 

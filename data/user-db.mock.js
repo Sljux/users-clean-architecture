@@ -1,5 +1,13 @@
 const userMap = new Map();
 
+function cleanUser(fromDb) {
+  return {
+    username: fromDb.username,
+    password: fromDb.password,
+    likes: fromDb.likedBy.length,
+  };
+}
+
 async function findByUsername(username) {
   const fromDb = userMap.get(username);
 
@@ -7,11 +15,7 @@ async function findByUsername(username) {
     return null;
   }
 
-  return {
-    username: fromDb.username,
-    password: fromDb.password,
-    likes: fromDb.likedBy.length,
-  };
+  return cleanUser(fromDb);
 }
 
 async function insert(user) {
@@ -53,6 +57,29 @@ async function unlikeUser(userToUnlike, username) {
   }
 }
 
+async function listUsers({ sortBy, sortOrder = 'asc', skip = 0, limit = 20 }) {
+  const users = [];
+
+  userMap.forEach((user) => {
+    users.push(cleanUser(user));
+  });
+
+  const order = sortOrder === 'asc' ? 1 : -1;
+
+  switch (sortBy) {
+  case 'username':
+    users.sort((a, b) => order * a.username.localeCompare(b.username));
+    break;
+  case 'likes':
+    users.sort((a, b) => order * (a.likes - b.likes));
+    break;
+  default:
+    break;
+  }
+
+  return users.slice(skip, skip + limit);
+}
+
 module.exports = {
   findByUsername,
   insert,
@@ -60,4 +87,5 @@ module.exports = {
   updatePassword,
   likeUser,
   unlikeUser,
+  listUsers,
 };

@@ -74,4 +74,19 @@ describe('Unlike user', () => {
 
     expect(fromDB.likes).toEqual(0);
   });
+
+
+  it('should not allow self-un-like', async () => {
+    const user = await insertUser(likingUser);
+
+    let error;
+
+    try {
+      await unlikeUser(user.username, user.username);
+    } catch (e) {
+      error = e;
+    }
+
+    expect(error).toBeInstanceOf(Error);
+  });
 });

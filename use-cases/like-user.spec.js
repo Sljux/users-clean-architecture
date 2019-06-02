@@ -50,4 +50,18 @@ describe('Like user', () => {
 
     expect(fromDB.likes).toEqual(1);
   });
+
+  it('should not allow self-like', async () => {
+    const user = await insertUser(likingUser);
+
+    let error;
+
+    try {
+      await likeUser(user.username, user.username);
+    } catch (e) {
+      error = e;
+    }
+
+    expect(error).toBeInstanceOf(Error);
+  });
 });
