@@ -1,31 +1,31 @@
-##User Management Service
+## User Management Service
 
 A service for managing users, that can like and un-like each other.
 
 Requires a running MongoDB server.
 
-####Scripts
+#### Scripts
 `npm start` to start up the server
 
 `npm run dev` to start up a dev server, which restarts on code changes (using `nodemon`).
 
 `npm test` to run test (using `jest`)
 
-##Code
+## Code
 
 Code is organized into entities, use-cases, data adapter, and HTTP adapter.
 
-###Dependency injection
+### Dependency injection
 
 Use of any DI framework is avoided and all the injection is done using simple
 builder functions.
 
-####Entities
+#### Entities
 
 Users and Tokens are entities in this service, holding domain data and high level data
 manipulation, like password encryption and token encoding/decoding.
 
-####Use-cases
+#### Use-cases
 
 Use-cases manipulate entities and communicate to data storage adapters to form
 application features. They are located in the `./use-cases` directory. Use-cases
@@ -34,7 +34,7 @@ This makes it easier to swap dependencies with others that match the same interf
 For example, when testing use-cases we inject am in-memory user data store for faster
 testing.
 
-####Data adapter
+#### Data adapter
 
 All the details of data persistence is abstracted into the data adapter, located in
 `./data` directory. This implementation is done using MongoDB with the raw MongoDB
@@ -43,7 +43,7 @@ Node.JS driver. Since this service communicates back in plain objects, and it's 
 another type of persistence (SQL, third-party API, raw files, ...), without changing
 anything in the use-cases.
 
-####HTTP adapter
+#### HTTP adapter
 
 All the details of HTTP communication is abstracted into the HTTP adapter, located in 
 `./http` directory. This implementation uses Express, and incapsulates all the details
